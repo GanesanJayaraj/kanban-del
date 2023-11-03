@@ -19,6 +19,7 @@ src = './assets/profile.png'
 
     <link rel="stylesheet" href="style.css">
 
+
 </head>
 
 <body>
@@ -31,44 +32,75 @@ src = './assets/profile.png'
             <div class="black color"></div>
         </div>
 
-        <div class="action-btn-cont">
-            <div class="remove-btn">
-                <img src="cross-logo.png" alt="color-logo" height="50%">
-            </div>
-        </div>
+
     </div>
 
     <!-- MAIN CONTAINER - Tickets holder -->
     <div class="main-cont">
         <!-- <div class="ticket-color ${ticketColor}"></div>
        <div class="ticket-id">${id}</div>
-       <div class="task-area">${ticketTask}</div> -->
+       <div class="task-area">${ticketTask}</div>
+       <div class="ticket-lock">
+       <button>Locked</button>
+      </div> -->
     </div>
+    </div>
+
+    <!-- MODAL - Ticket generator window -->
+    <div class="modal-cont">
+
+        <textarea class="textArea-cont" placeholder="Enter Your Task" spellcheck="false">
+
+       </textarea>
+
+
+        <div class="priority-colors-container">
+            <div class="lightpink priority-color"></div>
+            <div class="lightgreen priority-color"></div>
+            <div class="lightblue priority-color"></div>
+            <div class="black priority-color active"></div>
+        </div>
+
     </div>
 
     <script src="script.js">
     </script>
     <script>
-        // Write your solution here ====================================================
-        let delBtn = document.querySelector(".remove-btn");
+        // Write your solution here =====================================================
         let allTickets = document.querySelectorAll(".ticket-cont");
-        let delActive = false;
-        delBtn.addEventListener("click", (e)=>{
-            delActive = !delActive;
-            console.log(delActive ? "active" : "inactive");
-            if(delActive) {
-                delBtn.style.backgroundColor = "red";
-                alert("delete button has been activated");
-            } else {
-                delBtn.style.backgroundColor = "transparent";
-            }
-        });
         Array.from(allTickets).forEach((ticket)=>{
             ticket.addEventListener("click", (e)=>{
-                if(delActive) {
-                    ticket.remove();
-                    ticket.style.display = "hidden"
-                    // e.remove()
+                // console.log(e.target.tagName);
+                let taskArea = ticket.querySelector(".task-area");
+                let taskID = ticket.querySelector(".ticket-id");
+                if(e.target.tagName == "BUTTON") {
+                    switch (e.target.textContent) {
+                        case "Locked":
+                            e.target.textContent = "Unlocked";
+                            taskArea.contentEditable = true;
+                            taskArea.addEventListener("input", ()=>{
+                                let ticketID = taskID.textContent;
+                                if (ticketID) {
+    
+                                    ticketObj = ticketsArr.find(tick=>tick.ticketID == ticketID);
+                                    let ind = ticketsArr.indexOf(ticketObj)
+                                    // console.log(ind, taskArea.textContent , ticketObj)
+                                    ticketObj.ticketTask = taskArea.textContent;
+                                    ticketsArr.splice(ind, ticketObj)
+                                    console.log(ticketsArr)
+                                }
+                            });
+
+                            break;
+                        case "Unlocked":
+                            e.target.textContent = "Locked";
+                            taskArea.contentEditable = false;
+
+                            break;
+                    
+                        default:
+                            break;
+                    }
                 }
             })
         });
